@@ -94,10 +94,13 @@ def tcpdump_installation(hostname):
        else:
          tcpdumpLab2 = tkinter.Label(window, text=f"tcpdump not installed on your machine installing now\n")
          tcpdumpLab2.pack()
+         window.update()
          stdin, stdout, stderr = ssh.exec_command("yum -y install tcpdump")
          time.sleep(20)
-         tcpdumpLab3 = tkinter.Label(window, text=f"nstallation completed\n")
+         window.update()
+         tcpdumpLab3 = tkinter.Label(window, text=f"Installation completed\n")
          tcpdumpLab3.pack()
+         window.update()
          stdin, stdout, stderr = ssh.exec_command("tcpdump --help")
          file_lines = stderr.readlines()
          patt = r"\btcpdump version\b"
@@ -150,8 +153,8 @@ def collect_pcap(hostname,eth,filename,seconds,path):
         ftp.get(filename,path+"\\"+filename)
         ftp.close()
         ssh.close()  # close connection
-        pcapLab4 = tkinter.Label(window, text=f"Download completed, you can find your {filename} at {path}\n \n\n CLOSE THE WINDOW TO END THE SCRIPT")
-        pcapLab4.pack()
+        pcapLab5 = tkinter.Label(window, text=f"Download completed, you can find your {filename} at {path}\n \n\n CLOSE THE WINDOW TO END THE SCRIPT")
+        pcapLab5.pack()
         cmd = f"del {path}+\\hosts.txt"
         sp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         my_progress["value"] = 100
@@ -168,7 +171,7 @@ def collect_pcap(hostname,eth,filename,seconds,path):
 
 
 window=tkinter.Tk()
-window.geometry("800x600")
+window.geometry("900x800")
 path_var=tkinter.StringVar()
 hostname_var=tkinter.StringVar()
 seconds_var=tkinter.StringVar()

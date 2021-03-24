@@ -246,9 +246,9 @@ def remove_portblocker(hostname):
         file_err = stderr.readlines()
         for err in file_err:
             if err in file_err:
-                UninLab = tkinter.Label(window, text=f"{err}\n Portblocker has been uninstalled\n")
+                UninLab = tkinter.Label(window, text=f"{err}\n Portblocker has been uninstalled\n \n\n CLOSE THE WINDOW TO END THE SCRIPT")
                 UninLab.grid(row=20, column=1)
-                print(f"{err}\n Portblocker has been uninstalled")
+              #  print(f"{err}\n Portblocker has been uninstalled")
                 ssh.close()
         my_progress["value"] = 80
         window.update_idletasks()
@@ -264,7 +264,7 @@ def remove_portblocker(hostname):
 
 
 window=tkinter.Tk()
-window.geometry("1000x700")
+window.geometry("1000x800")
 path_var=tkinter.StringVar()
 hostname_var=tkinter.StringVar()
 a_var=tkinter.StringVar()

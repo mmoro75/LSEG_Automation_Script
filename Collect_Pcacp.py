@@ -72,7 +72,7 @@ def tcpdump_installation(hostname):
          print("tcpdum not installed on your machine installing now")
          stdin, stdout, stderr = ssh.exec_command("yum -y install tcpdump")
          time.sleep(20)
-         print("installation completed")
+         print("Installation completed")
          stdin, stdout, stderr = ssh.exec_command("tcpdump --help")
          file_lines = stderr.readlines()
          patt = r"\btcpdump version\b"
