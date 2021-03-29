@@ -16,10 +16,10 @@ def portbloker():
     hostname = input("please provide hostname-ip address: ")
     install_port_blocker(hostname,path)
     server_eth = collect_NICs(hostname,path)
-    eth1="".join(server_eth.get('eth1'))
-    eth2="".join(server_eth.get('eth2'))
-    eth3="".join(server_eth.get('eth3'))
-    eth4="".join(server_eth.get('eth4'))
+    eth1="".join(server_eth.get('eth1')).strip("-")
+    eth2="".join(server_eth.get('eth2')).strip("-")
+    eth3="".join(server_eth.get('eth3')).strip("-")
+    eth4="".join(server_eth.get('eth4')).strip("-")
     block_Ports(hostname, eth1, eth2, eth3, eth4)
     cmd = "del C:\\Users\\u6017127\\Documents\\Eikon\\Project\\TestPython\\hosts.txt"
     sp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -81,13 +81,13 @@ def collect_NICs(hostname,path):
         server_eth = {"eth1": [], "eth2": [], "eth3": [], "eth4": []}
         for each_line in files_lines:  # loop into list created
             if re.findall(patt1, each_line):  # only print when you fine key word DDNA
-                server_eth["eth1"].append(each_line[-5] + each_line[-4] + each_line[-3] + each_line[-2])
+                server_eth["eth1"].append(each_line[-6] + each_line[-5] + each_line[-4] + each_line[-3] + each_line[-2])
             elif re.findall(patt2, each_line):
-                server_eth["eth2"].append(each_line[-5] + each_line[-4] + each_line[-3] + each_line[-2])
+                server_eth["eth2"].append(each_line[-6] + each_line[-5] + each_line[-4] + each_line[-3] + each_line[-2])
             elif re.findall(patt3, each_line):
-                server_eth["eth3"].append(each_line[-5] + each_line[-4] + each_line[-3] + each_line[-2])
+                server_eth["eth3"].append(each_line[-6] + each_line[-5] + each_line[-4] + each_line[-3] + each_line[-2])
             elif re.findall(patt4, each_line):
-                server_eth["eth4"].append(each_line[-5] + each_line[-4] + each_line[-3] + each_line[-2])
+                server_eth["eth4"].append(each_line[-6] + each_line[-5] + each_line[-4] + each_line[-3] + each_line[-2])
         fo.close()
         print(f"NIC Card for DDNA is {server_eth.get('eth1')}")
         print(f"NIC Card for DDNB is {server_eth.get('eth2')}")

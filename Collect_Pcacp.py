@@ -42,7 +42,7 @@ def find_eth(hostname,path):
        # print(files_lines)
         for each_line in files_lines:     # loop into list created
             if re.findall(patt, each_line):   # only print when you fine key word DDNA
-                eth=each_line[-5]+each_line[-4]+each_line[-3]+each_line[-2]
+                eth=(each_line[-6]+each_line[-5]+each_line[-4]+each_line[-3]+each_line[-2]).strip("-")
                 break
         fo.close()
         print(f"Reading completed: NIC for DDNA is {eth}")

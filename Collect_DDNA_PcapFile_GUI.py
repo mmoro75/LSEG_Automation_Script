@@ -52,7 +52,7 @@ def find_eth(hostname,path):
         files_lines = fo.readlines() # readlines create a list with each line of the file
         for each_line in files_lines:     # loop into list created
             if re.findall(patt, each_line):   # only print when you fine key word DDNA
-                eth=each_line[-5]+each_line[-4]+each_line[-3]+each_line[-2]
+                eth=(each_line[-6]+each_line[-5]+each_line[-4]+each_line[-3]+each_line[-2]).strip("-")
                 break
         fo.close()
         ddnalab2 = tkinter.Label(window,text=f"Reading completed: NIC for DDNA is {eth}\n")
