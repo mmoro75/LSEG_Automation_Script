@@ -44,11 +44,9 @@ def install_port_blocker(hostname,path):
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname=hostname, username="root", password="Reuters1", port=22)
         ftp = ssh.open_sftp()
-        print("ftp connection installing portblocker")
         installLab = tkinter.Label(window,text=f"ftp connection installing portblocker \n")
         installLab.grid(row=10, column=1)
         window.update()
-        print(path + "\\portblocker.tar")
         ftp.put(path+"\\portblocker.tar", "/root/portblocker.tar")
         time.sleep(15)
         ftp.close()
@@ -70,8 +68,6 @@ def install_port_blocker(hostname,path):
             if err in file_err:
                 installLab2 = tkinter.Label(window, text=f"{err}\n Portblocker in not installed on your machine\n make sure 'portblocker.tar' file is in your working path")
                 installLab2.grid(row=12, column=1)
-                print(
-                    f"{err}\n Portblocker in not installed on your machine\n make sure 'portblocker.tar' file is in your working path")
                 ssh.close()
         my_progress["value"] = 30
         window.update_idletasks()
@@ -93,7 +89,6 @@ def collect_NICs(hostname,path):
         ftp = ssh.open_sftp()
         NICLab = tkinter.Label(window, text=f"ftp colletting server NICs information \n")
         NICLab.grid(row=13, column=1)
-        print("ftp colletting server NICs information")
         ftp.get("/etc/hosts", path+"\\hosts.txt")
         ftp.close()
         ssh.close()  # close connection
@@ -115,10 +110,6 @@ def collect_NICs(hostname,path):
             elif re.findall(patt4, each_line):
                 server_eth["eth4"].append(each_line[-6] + each_line[-5] + each_line[-4] + each_line[-3] + each_line[-2])
         fo.close()
-        print(f"NIC Card for DDNA is {server_eth.get('eth1')}")
-        print(f"NIC Card for DDNB is {server_eth.get('eth2')}")
-        print(f"NIC Card for EXCHA is {server_eth.get('eth3')}")
-        print(f"NIC Card for EXCHB is {server_eth.get('eth4')}")
         NICLab1 = tkinter.Label(window, text=f"NIC Card for DDNA is {server_eth.get('eth1')}\n" 
                 f"NIC Card for DDNB is {server_eth.get('eth2')}\n" f"NIC Card for EXCHA is {server_eth.get('eth3')}\n" f"NIC Card for EXCHB is {server_eth.get('eth4')}")
         NICLab1.grid(row=14, column=1)

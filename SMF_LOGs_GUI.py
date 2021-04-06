@@ -28,7 +28,6 @@ def fileDownload(hostname,path,today):
         ftp=ssh.open_sftp()
         con = tkinter.Label(window, text="ftp connection established executing")
         con.pack()
-        print("ftp connection established executing:")
         todaysmf=ftp.get("/ThomsonReuters/smf/log/"+filename,path+"\\smf-log-files."+today+".txt")
         ftp.close()
         ssh.close() # close connection
