@@ -230,13 +230,13 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
         elif a == "EXCH" and b == "B":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth3 + " -j " + eth4 + " -r B -s B -d B -e B -t " + seconds + " -f 1 -a")
-            print(f"All Exchange NIC cards traffic is blocked for {wait} seconds")
-            PortLab = tkinter.Label(window, text=f"All Exchange NIC cards traffic is blocked for {wait} seconds\n")
+            print(f"All Exchange NIC cards traffic are blocked for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"All Exchange NIC cards traffic are blocked for {wait} seconds\n")
             PortLab.grid(row=18, column=1)
             window.update()
             time.sleep(wait + 10)
             print("Completed all the blocked channles are back on line ")
-            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channels are back on line\n")
             PortLab1.grid(row=19, column=1)
             ssh.close()
         elif a == "EXCH" and b== "U":
@@ -250,7 +250,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
             PortLab1.grid(row=19, column=1)
             ssh.close()
-        elif a == "DDN" and b == "T":
+        elif a == "EXCH" and b == "T":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth3 + " -j " + eth4 + " -r T -s T -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All TCP Traffic is blocked on Exchange NIC for {wait} seconds")
@@ -265,7 +265,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             PortLab3 = tkinter.Label(window, text=f"WRONG SELECTIONS\n Your current selection is:\n NIC Cards to Block={a}\n Protocol:{b},please check all the inforamtion are correct \n")
             PortLab3.grid(row=18, column=1)
             print(f"WRONG SELECTIONS\n Your current selection is:\n NIC Cards to Block={a}\n Protocol:{b},please check all the inforamtion are correct")
-            block_Ports(hostname,username,password,eth,eth2,eth3,eth4)
+            block_Ports(hostname,username,password,eth1,eth2,eth3,eth4)
         ssh.close()
         my_progress["value"] = 70
         window.update_idletasks()

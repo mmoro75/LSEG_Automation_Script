@@ -185,7 +185,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             print("Completed all the blocked channles are back on line ")
             ssh.close()
             print("Portblocker stopped all the traffic is now restored")
-        elif a == "DDN" and b == "T":
+        elif a == "EXCH" and b == "T":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth3 + " -j " + eth4 + " -r T -s T -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All TCP Traffic is blocked on Exchange NIC for {wait} seconds")
@@ -195,7 +195,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             print("Portblocker stopped all the traffic is now restored")
         else:
             print(f"WRONG SELECTIONS\n Your current selection is:\n NIC Cards to Block={a}\n Protocol:{b},please check all the inforamtion are correct")
-            block_Ports(hostname,username,password,eth,eth2,eth3,eth4)
+            block_Ports(hostname,username,password,eth1,eth2,eth3,eth4)
         ssh.close()
         return None
     except socket.gaierror:
