@@ -2,6 +2,7 @@ import paramiko
 import datetime
 import re
 import tkinter
+import socket
 
 def ErrorLogs():
     global filename
@@ -22,8 +23,6 @@ def ErrorLogs():
         FilesDownload(hostname,path,fileList)
         Find_Critical_Files(path,fileList)
         Find_Warning_Files(path, fileList)
-    output = tkinter.Label(window, text=f"Completed find your files at: {path}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
-    output.pack()
     return None
 
 
@@ -62,18 +61,32 @@ def FileDownload(hostname,path):
         ftp.close()
         ssh.close() # close connection
         return todaysmf
+    except socket.gaierror:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
     except FileNotFoundError:
-        err = tkinter.Label(window, text=f"SMF file not found make sure the server ip and local path provided are correct")
+        err = tkinter.Label(window, text=f"SMF file not found make sure the server ip and local path provided are correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
     except ConnectionError:
-        err = tkinter.Label(window, text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        err = tkinter.Label(window, text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
     except ConnectionRefusedError:
-        err = tkinter.Label(window, text=f"connection is refused make sure password for the server is correct")
+        err = tkinter.Label(window, text=f"connection is refused make sure password for the server is correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
     except Exception as e:
-        err = tkinter.Label(window, text=f"{e}\n")
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
 
 def FilesDownload(hostname,path,fileList):
     try:
@@ -90,20 +103,36 @@ def FilesDownload(hostname,path,fileList):
         ftp.close()
         ssh.close()  # close connection
         return None
+    except socket.gaierror:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
     except FileNotFoundError:
         err = tkinter.Label(window,
-                            text=f"SMF file not found make sure the server ip and local path provided are correct")
+                            text=f"SMF file not found make sure the server ip and local path provided are correct\n \n double check dates and days range provided are also in the correct format\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
     except ConnectionError:
         err = tkinter.Label(window,
-                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
     except ConnectionRefusedError:
-        err = tkinter.Label(window, text=f"connection is refused make sure password for the server is correct")
+        err = tkinter.Label(window,
+                            text=f"connection is refused make sure password for the server is correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
     except Exception as e:
-        err = tkinter.Label(window, text=f"{e}\n")
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
+
 
 def Find_Critical(path, today):
     try:
@@ -118,11 +147,13 @@ def Find_Critical(path, today):
         fo2.close()
         return None
     except FileNotFoundError:
-        err = tkinter.Label(window, text=f"SMF file not found make sure SMF file to analyze is downloaded at {path}")
+        err = tkinter.Label(window, text=f"SMF file not found make sure SMF file to analyze is downloaded at {path}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
     except Exception as e:
-        err = tkinter.Label(window, text=f"{e}\n")
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
 
 
 def Find_Warning(path, today):
@@ -136,13 +167,18 @@ def Find_Warning(path, today):
                 fo2.write(each_line)  # write line on errorlog file
         fo.close()
         fo2.close()
+        output = tkinter.Label(window,
+                               text=f"Completed find your files at: {path}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        output.pack()
         return None
     except FileNotFoundError:
-        err = tkinter.Label(window, text=f"SMF file not found make sure SMF file to analyze is downloaded at {path}")
+        err = tkinter.Label(window, text=f"SMF file not found make sure SMF file to analyze is downloaded at {path}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
     except Exception as e:
-        err = tkinter.Label(window, text=f"{e}\n")
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
 
 
 def Find_Critical_Files(path,fileList):
@@ -163,11 +199,13 @@ def Find_Critical_Files(path,fileList):
         return None
 
     except FileNotFoundError:
-        err = tkinter.Label(window, text=f"SMF file not found make sure SMF file to analyze is downloaded at {path}")
+        err = tkinter.Label(window, text=f"SMF file not found make sure SMF file to analyze is downloaded at {path}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
     except Exception as e:
-        err = tkinter.Label(window, text=f"{e}\n")
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
 
 def Find_Warning_Files(path,fileList):
     try:
@@ -182,16 +220,21 @@ def Find_Warning_Files(path,fileList):
                 if re.findall(patt, each_line):  # only print when you fine key word DDNA or DDNB
                     if each_line is not "":
                         fo1.write(each_line)  # write line on errorlog file
+        output = tkinter.Label(window,
+                               text=f"Completed find your files at: {path}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        output.pack()
         fo.close()
         fo1.close()
         return None
 
     except FileNotFoundError:
-        err = tkinter.Label(window, text=f"SMF file not found make sure SMF file to analyze is downloaded at {path}")
+        err = tkinter.Label(window, text=f"SMF file not found make sure SMF file to analyze is downloaded at {path}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
     except Exception as e:
-        err = tkinter.Label(window, text=f"{e}\n")
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
+        raise
 
 
 

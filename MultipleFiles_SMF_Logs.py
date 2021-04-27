@@ -1,6 +1,7 @@
 import paramiko
 import datetime
 import re
+import socket
 
 def ErrorLogs():
     global filename
@@ -57,14 +58,23 @@ def FileDownload(hostname,path):
         ftp.close()
         ssh.close() # close connection
         return todaysmf
+    except TimeoutError:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
+    except socket.gaierror:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
     except FileNotFoundError:
         print("SMF file not found make sure the server ip and local path provided are correct")
+        quit()
     except ConnectionError:
         print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
     except ConnectionRefusedError:
         print("connection is refused make sure password for the server is correct")
     except Exception as e:
          print(e)
+         quit()
 
 def FilesDownload(hostname,path,fileList):
     try:
@@ -81,14 +91,24 @@ def FilesDownload(hostname,path,fileList):
         ssh.close()  # close connection
         return None
         return todaysmf
+    except TimeoutError:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
+    except socket.gaierror:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
     except FileNotFoundError:
-        print("SMF file not found make sure the server ip and local path provided are correct")
+        print("SMF file not found make sure the server ip and local path provided are correct\n double check dates and days range provided are also in the correct format")
+        quit()
     except ConnectionError:
         print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
     except ConnectionRefusedError:
         print("connection is refused make sure password for the server is correct")
+        quit()
     except Exception as e:
         print(e)
+        quit()
 
 def Find_Critical(path, today):
     try:
@@ -104,8 +124,10 @@ def Find_Critical(path, today):
         return None
     except FileNotFoundError:
         print(f"SMF file not found make sure SMF file to analyze is downloaded at {path}")
+        quit()
     except Exception as e:
         print(e)
+        quit()
 
 def Find_Warning(path, today):
     try:
@@ -121,8 +143,10 @@ def Find_Warning(path, today):
         return None
     except FileNotFoundError:
         print(f"SMF file not found make sure SMF file to analyze is downloaded at {path}")
+        quit()
     except Exception as e:
         print(e)
+        quit()
 
 def Find_Critical_Files(path,fileList):
     try:
@@ -143,8 +167,10 @@ def Find_Critical_Files(path,fileList):
 
     except FileNotFoundError:
         print(f"SMF file not found make sure SMF file to analyze is downloaded at {path}")
+        quit()
     except Exception as e:
         print(e)
+        quit()
 
 def Find_Warning_Files(path,fileList):
     try:
@@ -164,7 +190,12 @@ def Find_Warning_Files(path,fileList):
         return None
     except FileNotFoundError:
         print(f"SMF file not found make sure SMF file to analyze is downloaded at {path}")
+        quit()
     except Exception as e:
         print(e)
+        quit()
 
 ErrorLogs()
+
+if __name__=="__ErrorLogs__":
+    ErrorLogs()

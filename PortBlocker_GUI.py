@@ -7,6 +7,7 @@ import time
 import datetime
 import subprocess
 from tkinter import ttk
+import socket
 
 
 def status():
@@ -73,10 +74,36 @@ def install_port_blocker(hostname,path):
         window.update_idletasks()
         window.update()
         return None
+    except socket.gaierror:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=22, column=1)
+        raise
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=22, column=1)
+        raise
+    except FileNotFoundError:
+        err = tkinter.Label(window,
+                            text=f"PortBlocker file not found make sure the server ip and local path provided are correct\n \nPlease double check Poerbloker.tar file is located into provided direcotry\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=22, column=1)
+        raise
+    except ConnectionError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=22, column=1)
+        raise
+    except ConnectionRefusedError:
+        err = tkinter.Label(window,
+                            text=f"connection is refused make sure password for the server is correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=22, column=1)
+        raise
     except Exception as e:
         err = tkinter.Label(window, text=f"{e}\n")
         err.grid(row=22,column=1)
         window.update()
+        raise
     finally:
         my_progress.stop()
 
@@ -118,22 +145,54 @@ def collect_NICs(hostname,path):
         window.update_idletasks()
         window.update()
         return server_eth
+    except socket.gaierror:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=23, column=1)
+        raise
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=23, column=1)
+        raise
+    except FileNotFoundError:
+        err = tkinter.Label(window,
+                            text=f"Host file not found make sure the server ip and local path provided are correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=23, column=1)
+        raise
+    except ConnectionError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=23, column=1)
+        raise
+    except ConnectionRefusedError:
+        err = tkinter.Label(window,
+                            text=f"connection is refused make sure password for the server is correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=23, column=1)
+        raise
     except Exception as e:
         err = tkinter.Label(window, text=f"{e}\n")
-        err.grid(row=23,column=1)
+        err.grid(row=23, column=1)
         window.update()
+        raise
     finally:
         my_progress.stop()
+
 
 def block_Ports(hostname,eth,eth2,eth3,eth4):
     try:
         ssh = paramiko.SSHClient()  # create ssh client
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname=hostname, username="root", password="Reuters1", port=22)
-        print("Connected to remote host")
         a = a_var.get()
         b = b_var.get()
-        wait= int(seconds_var.get())
+        try:
+          wait= int(seconds_var.get())
+        except ValueError:
+            err = tkinter.Label(window, text=f"Please provide time in seconds Close this Window and restart")
+            err.grid(row=27, column=1)
+            my_progress.stop()
+            raise
         seconds = str(wait)
         if a == "DDN" and b=="B":
             stdin, stdout, stderr = ssh.exec_command(
@@ -211,10 +270,31 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
         my_progress["value"] = 70
         window.update_idletasks()
         return None
+    except socket.gaierror:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=24, column=1)
+        raise
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=24, column=1)
+        raise
+    except ConnectionError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=24, column=1)
+        raise
+    except ConnectionRefusedError:
+        err = tkinter.Label(window,
+                            text=f"connection is refused make sure password for the server is correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=24, column=1)
+        raise
     except Exception as e:
         err = tkinter.Label(window, text=f"{e}\n")
         err.grid(row=24,column=1)
         window.update()
+        raise
     finally:
         my_progress.stop()
 
@@ -246,10 +326,36 @@ def remove_portblocker(hostname):
         time.sleep(5)
         my_progress.stop()
         return None
+    except socket.gaierror:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=25, column=1)
+        raise
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=25, column=1)
+        raise
+    except FileNotFoundError:
+        err = tkinter.Label(window,
+                            text=f"PoerBlocker not installed found make sure the server ip and local path provided are correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=25, column=1)
+        raise
+    except ConnectionError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=25, column=1)
+        raise
+    except ConnectionRefusedError:
+        err = tkinter.Label(window,
+                            text=f"connection is refused make sure password for the server is correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.grid(row=25, column=1)
+        raise
     except Exception as e:
         err = tkinter.Label(window, text=f"{e}\n")
         err.grid(row=25,column=1)
         window.update()
+        raise
     finally:
         my_progress.stop()
 

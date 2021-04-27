@@ -6,6 +6,7 @@ import re
 import time
 import datetime
 import subprocess
+import socket
 
 def status():
     my_progress["value"] = 20
@@ -15,14 +16,19 @@ def status():
 def get_pcap():
     global filename
     global seconds
-    global eth
     global path
     today = datetime.datetime.now().strftime("%Y%m%d")
     filename = "DDNA-" + today + ".pcap"
     my_progress.start(10)
     window.update_idletasks()
     path = path_var.get()
-    seconds=int(seconds_var.get())
+    try:
+      seconds=int(seconds_var.get())
+    except ValueError:
+        err = tkinter.Label(window,text=f"Please provide time in seconds and press Execute to continue")
+        err.pack()
+        my_progress.stop()
+        raise
     hostname = hostname_var.get()
     if NIC_var.get() == "DDNA":
        eth_ddn = find_eth_ddna(hostname,path)
@@ -73,19 +79,43 @@ def find_eth_ddna(hostname, path):
         window.update_idletasks()
         window.update()
         time.sleep(5)
-        tcpdump_installation(hostname)
         return str(eth_ddn)
-    except Exception as e:
-        err = tkinter.Label(window, text=f"{e}\n")
+    except socket.gaierror:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
-        window.update()
+        raise
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except FileNotFoundError:
+        err = tkinter.Label(window,
+                            text=f"Host file not found make sure the server ip and local path provided are correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except ConnectionError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except ConnectionRefusedError:
+        err = tkinter.Label(window,
+                            text=f"connection is refused make sure password for the server is correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except Exception as e:
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
     finally:
         my_progress.stop()
 
 
+
 def find_eth_exch(hostname, path):
     try:
-        global ho
         ssh = paramiko.SSHClient()  # create ssh client
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname=hostname, username="root", password="Reuters1", port=22)
@@ -102,23 +132,48 @@ def find_eth_exch(hostname, path):
         files_lines = fo.readlines()  # readlines create a list with each line of the file
         for each_line in files_lines:  # loop into list created
             if re.findall(patt, each_line):  # only print when you fine key word DDNA
-                eth = (each_line[-6] + each_line[-5] + each_line[-4] + each_line[-3] + each_line[-2]).strip("-")
+                eth_exch = (each_line[-6] + each_line[-5] + each_line[-4] + each_line[-3] + each_line[-2]).strip("-")
                 break
         fo.close()
-        ddnalab2 = tkinter.Label(window, text=f"Reading completed: NIC for DDNA is {eth_exch}\n")
+        ddnalab2 = tkinter.Label(window, text=f"Reading completed: NIC for EXCHA is {eth_exch}\n")
         ddnalab2.pack()
         my_progress["value"] = 30
         window.update_idletasks()
         window.update()
         time.sleep(5)
-        tcpdump_installation(hostname)
         return str(eth_exch)
-    except Exception as e:
-        err = tkinter.Label(window, text=f"{e}\n")
+    except socket.gaierror:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
-        window.update()
+        raise
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except FileNotFoundError:
+        err = tkinter.Label(window,
+                            text=f"Host file not found make sure the server ip and local path provided are correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except ConnectionError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except ConnectionRefusedError:
+        err = tkinter.Label(window,
+                            text=f"connection is refused make sure password for the server is correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except Exception as e:
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
     finally:
         my_progress.stop()
+
 
 
 def tcpdump_installation(hostname):
@@ -214,6 +269,11 @@ def collect_pcap_ddna(hostname,eth_ddn,filename,seconds,path):
         time.sleep(5)
         my_progress.stop()
         return None
+   except FileNotFoundError:
+       err = tkinter.Label(window,
+                           text=f"Pcap file not found make sure the server ip and local path provided are correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+       err.pack()
+       raise
    except Exception as e:
        err = tkinter.Label(window, text=f"{e}\n")
        err.pack()
@@ -257,12 +317,18 @@ def collect_pcap_exch(hostname,eth_exch,filename,seconds,path):
         time.sleep(5)
         my_progress.stop()
         return None
+   except FileNotFoundError:
+       err = tkinter.Label(window,
+                           text=f"Pcap file not found make sure the server ip and local path provided are correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+       err.pack()
+       raise
    except Exception as e:
        err = tkinter.Label(window, text=f"{e}\n")
        err.pack()
        window.update()
    finally:
        my_progress.stop()
+
 
 
 window=tkinter.Tk()

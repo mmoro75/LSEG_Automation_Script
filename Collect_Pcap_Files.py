@@ -3,6 +3,7 @@ import re
 import time
 import datetime
 import subprocess
+import socket
 
 
 def get_pcap():
@@ -12,7 +13,10 @@ def get_pcap():
     global path
     today = datetime.datetime.now().strftime("%Y%m%d")
     path = input("Please provide a path where you want your pcap to be stored: ")
-    seconds=eval(input("how long do you want the pcap to be in seconds: "))
+    try:
+      seconds=eval(input("how long do you want the pcap to be in seconds: "))
+    except ValueError:
+        print("Please provide time in seconds and press Execute to continue")
     hostname = input("please provide hostname-ip_address: ")
     eth = input("please specify where do you want to collect Pcap from: DDNA or EXCHA:")
     if eth.upper() == "DDNA":
@@ -56,14 +60,24 @@ def find_eth_ddna(hostname,path):
         fo.close()
         print(f"Reading completed: NIC for DDNA is {eth_ddn}")
         return str(eth_ddn)
+    except socket.gaierror:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
+    except TimeoutError:
+        print("Host file not found make sure the server ip and local path provided are correct")
+        quit()
     except FileNotFoundError:
-        print("SMF file not found make sure the server ip and local path provided are correct")
+        print("Host file not found make sure the server ip and local path provided are correct")
+        quit()
     except ConnectionError:
         print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
     except ConnectionRefusedError:
         print("connection is refused make sure password for the server is correct")
+        quit()
     except Exception as e:
         print(e)
+        quit()
 
 
 def find_eth_exch(hostname,path):
@@ -88,14 +102,25 @@ def find_eth_exch(hostname,path):
         fo.close()
         print(f"Reading completed: NIC for DDNA is {eth_exch}")
         return str(eth_exch)
+    except socket.gaierror:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
+    except TimeoutError:
+        print("Host file not found make sure the server ip and local path provided are correct")
+        quit()
     except FileNotFoundError:
-        print("SMF file not found make sure the server ip and local path provided are correct")
+        print("Host file not found make sure the server ip and local path provided are correct")
+        quit()
     except ConnectionError:
         print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
     except ConnectionRefusedError:
         print("connection is refused make sure password for the server is correct")
+        quit()
     except Exception as e:
         print(e)
+        quit()
+
 
 def tcpdump_installation(hostname):
    try:
@@ -158,13 +183,17 @@ def collect_pcap_ddna(hostname,eth_ddn,filename,seconds,path):
         print(f"Download completed, you can find your {filename} at {path}")
         return None
     except FileNotFoundError:
-        print("SMF file not found make sure the server ip and local path provided are correct")
+        print("Pcap file not found make sure the server ip and local path provided are correct")
+        quit()
     except ConnectionError:
         print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
     except ConnectionRefusedError:
         print("connection is refused make sure password for the server is correct")
+        quit()
     except Exception as e:
         print(e)
+        quit()
 
 def collect_pcap_exch(hostname,eth_exch,filename,seconds,path):
     try:
@@ -184,13 +213,17 @@ def collect_pcap_exch(hostname,eth_exch,filename,seconds,path):
         print(f"Download completed, you can find your {filename} at {path}")
         return None
     except FileNotFoundError:
-        print("SMF file not found make sure the server ip and local path provided are correct")
+        print("Pcap file not found make sure the server ip and local path provided are correct")
+        quit()
     except ConnectionError:
         print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
     except ConnectionRefusedError:
         print("connection is refused make sure password for the server is correct")
+        quit()
     except Exception as e:
         print(e)
+        quit()
 
 get_pcap()
 

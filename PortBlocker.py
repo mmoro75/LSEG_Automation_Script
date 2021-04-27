@@ -5,6 +5,7 @@ import re
 import time
 import datetime
 import subprocess
+import socket
 
 
 def portbloker():
@@ -56,8 +57,24 @@ def install_port_blocker(hostname,path):
                     f"{err}\n Portblocker in not installed on your machine\n make sure 'portblocker.tar' file is in your working path")
                 ssh.close()
         return None
+    except socket.gaierror:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
+    except TimeoutError:
+        print("PoertBlocker file not found make sure the server ip and local path provided are correct\n Plese double check Portblocket.tar File is located in given Directory")
+        quit()
+    except FileNotFoundError:
+        print("Host file not found make sure the server ip and local path provided are correct")
+        quit()
+    except ConnectionError:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
+    except ConnectionRefusedError:
+        print("connection is refused make sure password for the server is correct")
+        quit()
     except Exception as e:
         print(e)
+        quit()
 
 
 def collect_NICs(hostname,path):
@@ -95,8 +112,24 @@ def collect_NICs(hostname,path):
         print(f"NIC Card for EXCHB is {server_eth.get('eth4')}")
         ssh.close()
         return server_eth
+    except socket.gaierror:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
+    except TimeoutError:
+        print("Host file not found make sure the server ip and local path provided are correct")
+        quit()
+    except FileNotFoundError:
+        print("Host file not found make sure the server ip and local path provided are correct")
+        quit()
+    except ConnectionError:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
+    except ConnectionRefusedError:
+        print("connection is refused make sure password for the server is correct")
+        quit()
     except Exception as e:
         print(e)
+        quit()
 
 
 def block_Ports(hostname,eth,eth2,eth3,eth4):
@@ -107,7 +140,10 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
         print("Connected to remote host")
         a = input("Please provide NIC Card to block: DDN or EXCH?: ").upper()
         b = input("Please provide protocol you want to block UDP, TCP, BOTH: U,T,B: ").upper()
-        wait=eval(input("how many seconds to you want to keep Cards blocked? ebeter value in seconds: "))
+        try:
+          wait=eval(input("how many seconds to you want to keep Cards blocked? enter value in seconds: "))
+        except ValueError:
+            print("please provide time in seconds")
         seconds = str(wait)
         if a == "DDN" and b=="B":
             stdin, stdout, stderr = ssh.exec_command(
@@ -162,8 +198,22 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             block_Ports(hostname,username,password,eth,eth2,eth3,eth4)
         ssh.close()
         return None
+    except socket.gaierror:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
+    except TimeoutError:
+        print("Host file not found make sure the server ip and local path provided are correct")
+        quit()
+    except ConnectionError:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
+    except ConnectionRefusedError:
+        print("connection is refused make sure password for the server is correct")
+        quit()
     except Exception as e:
         print(e)
+        quit()
+
 
 def remove_portblocker(hostname):
     try:
@@ -185,8 +235,25 @@ def remove_portblocker(hostname):
                 print(f"{err}\n Portblocker has been uninstalled")
                 ssh.close()
         return None
+    except socket.gaierror:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
+    except TimeoutError:
+        print("Host file not found make sure the server ip and local path provided are correct")
+        quit()
+    except FileNotFoundError:
+        print("PortBlocker is not found make sure the server ip and local path provided are correct")
+        quit()
+    except ConnectionError:
+        print("Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN")
+        quit()
+    except ConnectionRefusedError:
+        print("connection is refused make sure password for the server is correct")
+        quit()
     except Exception as e:
         print(e)
+        quit()
+
 
 portbloker()
 

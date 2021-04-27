@@ -5,6 +5,7 @@ import datetime
 import os
 from os import listdir
 from os import walk
+import socket
 
 def CoreLogs():
     global today
@@ -45,10 +46,35 @@ def filesDownload(hostname,path):
         ftp.close()
         ssh.close()  # close connection
         return None
+    except socket.gaierror:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except FileNotFoundError:
+        err = tkinter.Label(window,
+                            text=f"file not found make sure the server ip and local path provided are correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except ConnectionError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except ConnectionRefusedError:
+        err = tkinter.Label(window,
+                            text=f"connection is refused make sure password for the server is correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
     except Exception as e:
-         err = tkinter.Label(window,text=f"{e}\n")
-         err.pack()
-         window.update()
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
 
 
 def FMSClientDownload(hostname,path):
@@ -61,10 +87,34 @@ def FMSClientDownload(hostname,path):
         ftp.close()
         ssh.close() # close connection
         return None
+    except socket.gaierror:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except FileNotFoundError:
+        err = tkinter.Label(window,
+                            text=f"FMSClient file not found make sure the server ip and local path provided are correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+    except ConnectionError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except ConnectionRefusedError:
+        err = tkinter.Label(window,
+                            text=f"connection is refused make sure password for the server is correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
     except Exception as e:
-         err = tkinter.Label(window,text=f"{e}\n")
-         err.pack()
-         window.update()
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
 
 def SCWDownload(hostname,path):
     try:
@@ -77,10 +127,34 @@ def SCWDownload(hostname,path):
         ftp.close()
         ssh.close() # close connection
         return None
+    except socket.gaierror:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except FileNotFoundError:
+        err = tkinter.Label(window,
+                            text=f"SCW file not found make sure the server ip and local path provided are correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+    except ConnectionError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except ConnectionRefusedError:
+        err = tkinter.Label(window,
+                            text=f"connection is refused make sure password for the server is correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
     except Exception as e:
-         err = tkinter.Label(window,text=f"{e}\n")
-         err.pack()
-         window.update()
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
 
 def fileList(path):
     my_dir = path
@@ -98,20 +172,30 @@ def Find_Critical(path,files,today):
         for f in files:
             fo = open(my_dir + "\\" + f, "r")  # open host file in read mode
             fo1 = open(my_dir + "\\Critical-log-"+today+".txt", "a")
+            fo1.write(f"\n CRITICAL ERRORS IN  {f}\n ")
             files_lines = fo.readlines()  # readlines create a list with each line of the file
             for each_line in files_lines:  # loop into list crreated
                 if re.findall(patt, each_line):  # only print when you fine key word DDNA or DDNB
                     if each_line is not "":
-                        fo1.write(f"\n CRITICAL ERRORS IN  {f}\n ")
                         fo1.write(each_line)  # write line on errorlog file
         fo.close()
         fo1.close()
         return None
 
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except FileNotFoundError:
+        err = tkinter.Label(window,
+                            text=f"file not found make sure the server ip and local path provided are correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
     except Exception as e:
-         err = tkinter.Label(window,text=f"{e}\n")
-         err.pack()
-         window.update()
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
 
 def Find_Exceptions(path,files,today):
     try:
@@ -124,15 +208,26 @@ def Find_Exceptions(path,files,today):
             files_lines = fo.readlines()  # readlines create a list with each line of the file
             for each_line in files_lines:  # loop into list crreated
                 if re.findall(patt, each_line):  # only print when you fine key word DDNA or DDNB
-                    if each_line is not ""
+                    if each_line is not "":
                         fo1.write(each_line)  # write line on errorlog file
         fo.close()
         fo1.close()
 
-    except Exception as e:
-        err = tkinter.Label(window,text=f"{e}\n")
+    except TimeoutError:
+        err = tkinter.Label(window,
+                            text=f"Connection Error make sure server ip provided is correct and you are connected to the LSEG VPN\n \n CLOSE THE WINDOW TO END THE SCRIPT")
         err.pack()
-        window.update()
+        raise
+    except FileNotFoundError:
+        err = tkinter.Label(window,
+                            text=f"file not found make sure the server ip and local path provided are correct\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+    except Exception as e:
+        err = tkinter.Label(window, text=f"{e}\n \n CLOSE THE WINDOW TO END THE SCRIPT")
+        err.pack()
+        raise
+
 
 window=tkinter.Tk()
 window.geometry("700x500")
