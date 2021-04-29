@@ -28,7 +28,10 @@ def ErrorLogs():
 def daysRange(dates):
     d1, d2 = [int(d1) for d1 in input("Enter smf day from - to you want to analyze 'i.e 10 20': ").split()]
     if (d1 == d2):
-        return d1
+        smf=str(dates)+str(d1).zfill(2)
+        filename = "smf-log-files." + smf + "_235959.txt"
+        fileList = [filename]
+        return fileList
     else:
         res = []
         while (d1 < d2 + 1):

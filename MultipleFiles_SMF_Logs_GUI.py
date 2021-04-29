@@ -30,7 +30,10 @@ def daysRange(dates):
     d1=int(d1_var.get())
     d2=int(d2_var.get())
     if (d1 == d2):
-        return d1
+        smf=str(dates)+str(d1).zfill(2)
+        filename = "smf-log-files." + smf + "_235959.txt"
+        fileList = [filename]
+        return fileList
     else:
         res = []
         while (d1 < d2 + 1):
