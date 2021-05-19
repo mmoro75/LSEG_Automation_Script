@@ -13,6 +13,6 @@ Target Machine Linux Server -
 LSEG VPN Connectivity is required - 
 
 Install external python Module - 
-       pip install paramiko,
-       pip install tkinter. 
+       pip install paramiko
+       pip install tk 
        
