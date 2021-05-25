@@ -46,7 +46,7 @@ def install_port_blocker(hostname,path):
         ssh.connect(hostname=hostname, username="root", password="Reuters1", port=22)
         ftp = ssh.open_sftp()
         installLab = tkinter.Label(window,text=f"ftp connection installing portblocker \n")
-        installLab.grid(row=10, column=1)
+        installLab.grid(row=11, column=1)
         window.update()
         ftp.put(path+"\\portblocker.tar", "/root/portblocker.tar")
         time.sleep(15)
@@ -179,13 +179,14 @@ def collect_NICs(hostname,path):
         my_progress.stop()
 
 
-def block_Ports(hostname,eth,eth2,eth3,eth4):
+def block_Ports(hostname,eth1,eth2,eth3,eth4):
     try:
         ssh = paramiko.SSHClient()  # create ssh client
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname=hostname, username="root", password="Reuters1", port=22)
         a = a_var.get()
         b = b_var.get()
+        c = c_var.get()
         try:
           wait= int(seconds_var.get())
         except ValueError:
@@ -194,7 +195,10 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             my_progress.stop()
             raise
         seconds = str(wait)
-        if a == "DDN" and b=="B":
+######## Both NIC will be blocked ######
+
+
+        if a == "DDN" and b == "B" and c == "BS":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth1 + " -j " + eth2 + " -r B -s B -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All DDN NIC cards traffic is blocked for {wait} seconds")
@@ -205,7 +209,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
             PortLab1.grid(row=19, column=1)
             ssh.close()
-        elif a == "DDN" and b== "U":
+        elif a == "DDN" and b == "U" and c == "BS":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth1 + " -j " + eth2 + " -r U -s U -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All UPD Traffic is blocked on DDN NIC for {wait} seconds")
@@ -216,7 +220,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
             PortLab1.grid(row=19, column=1)
             ssh.close()
-        elif a == "DDN" and b == "T":
+        elif a == "DDN" and b == "T" and c == "BS":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth1 + " -j " + eth2 + " -r T -s T -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All TCP Traffic is blocked on DDN NIC for {wait} seconds")
@@ -227,7 +231,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
             PortLab1.grid(row=19, column=1)
             ssh.close()
-        elif a == "EXCH" and b == "B":
+        elif a == "EXCH" and b == "B" and c == "BS":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth3 + " -j " + eth4 + " -r B -s B -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All Exchange NIC cards traffic are blocked for {wait} seconds")
@@ -239,7 +243,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channels are back on line\n")
             PortLab1.grid(row=19, column=1)
             ssh.close()
-        elif a == "EXCH" and b== "U":
+        elif a == "EXCH" and b == "U" and c == "BS":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth3 + " -j " + eth4 + " -r U -s U -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All UPD Traffic is blocked on Exchange NIC for {wait} seconds")
@@ -250,7 +254,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
             PortLab1.grid(row=19, column=1)
             ssh.close()
-        elif a == "EXCH" and b == "T":
+        elif a == "EXCH" and b == "T" and c == "BS":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth3 + " -j " + eth4 + " -r T -s T -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All TCP Traffic is blocked on Exchange NIC for {wait} seconds")
@@ -261,11 +265,152 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
             PortLab1.grid(row=19, column=1)
             ssh.close()
+
+###### Only A NIC will be block #############
+
+        elif a == "DDN" and b == "B" and c == "AN":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth1  + " -r B -d B -t " + seconds + " -f 1 -a")
+            print(f"A DDN NIC card traffic is blocked for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"A DDN NIC card traffic is blocked for {wait} seconds\n")
+            PortLab.grid(row=18, column=1)
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
+            PortLab1.grid(row=19, column=1)
+            ssh.close()
+        elif a == "DDN" and b == "U" and c == "AN":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth1 + " -r U -d B -t " + seconds + " -f 1 -a")
+            print(f"All UPD Traffic is blocked on DDN-A NIC for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"All UPD Traffic is blocked on DDN-A NIC for {wait} seconds\n")
+            PortLab.grid(row=18, column=1)
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
+            PortLab1.grid(row=19, column=1)
+            ssh.close()
+        elif a == "DDN" and b == "T" and c == "AN":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth1 + " -r T -d B -t " + seconds + " -f 1 -a")
+            print(f"All TCP Traffic is blocked on DDN-A NIC for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"All TCP Traffic is blocked on DDN-A NIC for {wait} seconds\n")
+            PortLab.grid(row=18, column=1)
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
+            PortLab1.grid(row=19, column=1)
+            ssh.close()
+        elif a == "EXCH" and b == "B" and c == "AN":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth3 + " -r B -d B -t " + seconds + " -f 1 -a")
+            print(f"All Exchange NIC-A cards traffic are blocked for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"All Exchange NIC-A cards traffic are blocked for {wait} seconds\n")
+            PortLab.grid(row=18, column=1)
+            window.update()
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channels are back on line\n")
+            PortLab1.grid(row=19, column=1)
+            ssh.close()
+        elif a == "EXCH" and b == "U" and c == "AN":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth3 + " -r U -d B -t " + seconds + " -f 1 -a")
+            print(f"All UPD Traffic is blocked on Exchange NIC-A for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"All UPD Traffic is blocked on Exchange NIC-A for {wait} seconds\n")
+            PortLab.grid(row=18, column=1)
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
+            PortLab1.grid(row=19, column=1)
+            ssh.close()
+        elif a == "EXCH" and b == "T" and c == "AN":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth3 + "-r T -d B -t " + seconds + " -f 1 -a")
+            print(f"All TCP Traffic is blocked on Exchange NIC-A for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"All TCP Traffic is blocked on Exchange NIC-A for {wait} seconds\n")
+            PortLab.grid(row=18, column=1)
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
+            PortLab1.grid(row=19, column=1)
+            ssh.close()
+
+######## only B NIC will be blocked #######################
+
+
+        elif a == "DDN" and b == "B" and c == "BN":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth2 + " -r B -d B -t " + seconds + " -f 1 -a")
+            print(f"All traffic on DDN-B NIC card is blocked for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"All traffic on DDN-B NIC card is blocked for {wait} seconds\n")
+            PortLab.grid(row=18, column=1)
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
+            PortLab1.grid(row=19, column=1)
+            ssh.close()
+        elif a == "DDN" and b == "U" and c =="BN":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth2 + " -r U -d B -t " + seconds + " -f 1 -a")
+            print(f"All UPD Traffic is blocked on DDN NIC-B for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"All UPD Traffic is blocked on DDN NIC-B for {wait} seconds\n")
+            PortLab.grid(row=18, column=1)
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
+            PortLab1.grid(row=19, column=1)
+            ssh.close()
+        elif a == "DDN" and b == "T" and c =="BN":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth2 + " -r T -d B -t " + seconds + " -f 1 -a")
+            print(f"All TCP Traffic is blocked on DDN NIC-B for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"All TCP Traffic is blocked on DDN NIC-B for {wait} seconds\n")
+            PortLab.grid(row=18, column=1)
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
+            PortLab1.grid(row=19, column=1)
+            ssh.close()
+        elif a == "EXCH" and b == "B" and c =="BN":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth4 + " -r B -d B -t " + seconds + " -f 1 -a")
+            print(f"All traffic on Exchange NIC-B cards is blocked for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"All traffic on Exchange NIC-B cards is blocked for {wait} seconds\n")
+            PortLab.grid(row=18, column=1)
+            window.update()
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channels are back on line\n")
+            PortLab1.grid(row=19, column=1)
+            ssh.close()
+        elif a == "EXCH" and b== "U" and c =="BN":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth4 + " -r U -d B -t " + seconds + " -f 1 -a")
+            print(f"All UPD Traffic is blocked on Exchange NIC-B for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"All UPD Traffic is blocked on Exchange NIC-B for {wait} seconds\n")
+            PortLab.grid(row=18, column=1)
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
+            PortLab1.grid(row=19, column=1)
+            ssh.close()
+        elif a == "EXCH" and b == "T" and c == "BN":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth4 + " -r T -d B -t " + seconds + " -f 1 -a")
+            print(f"All TCP Traffic is blocked on Exchange NIC-B for {wait} seconds")
+            PortLab = tkinter.Label(window, text=f"All TCP Traffic is blocked on Exchange NIC-B for {wait} seconds\n")
+            PortLab.grid(row=18, column=1)
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            PortLab1 = tkinter.Label(window, text=f"Completed all the blocked channles are back on line\n")
+            PortLab1.grid(row=19, column=1)
+            ssh.close()
+
         else:
             PortLab3 = tkinter.Label(window, text=f"WRONG SELECTIONS\n Your current selection is:\n NIC Cards to Block={a}\n Protocol:{b},please check all the inforamtion are correct \n")
             PortLab3.grid(row=18, column=1)
-            print(f"WRONG SELECTIONS\n Your current selection is:\n NIC Cards to Block={a}\n Protocol:{b},please check all the inforamtion are correct")
-            block_Ports(hostname,username,password,eth1,eth2,eth3,eth4)
+            print(f"WRONG SELECTIONS\n Your current selection is:\n NIC Cards to Block={a}\n Protocol:{b}\n NIC:{c}\n Please check all the inforamtion are correct")
         ssh.close()
         my_progress["value"] = 70
         window.update_idletasks()
@@ -361,11 +506,12 @@ def remove_portblocker(hostname):
 
 
 window=tkinter.Tk()
-window.geometry("1000x800")
+window.geometry("1200x800")
 path_var=tkinter.StringVar()
 hostname_var=tkinter.StringVar()
 a_var=tkinter.StringVar()
 b_var=tkinter.StringVar()
+c_var=tkinter.StringVar()
 seconds_var=tkinter.StringVar()
 window.title("PortBlocker")
 label=tkinter.Label(window,text="Portblocker Configurations: ")
@@ -394,19 +540,25 @@ c2.deselect()
 
 c3 = tkinter.Checkbutton(window, text='Both UDP and TCP',variable=b_var, onvalue="B", offvalue="U")
 c3.grid(row=6,column=3)
-c4 = tkinter.Checkbutton(window ,variable=b_var, onvalue="DDN", offvalue="B",text='Both NIC')
-c4.grid(row=7,column=3)
+c4 = tkinter.Checkbutton(window ,variable=c_var, onvalue="AN",text='NIC-A')
+c4.grid(row=7,column=1)
 c4.deselect()
-c5 = tkinter.Checkbutton(window, text='Select NIC to BLock EXCH',variable=a_var, onvalue="EXCH", offvalue="DDN")
-c5.grid(row=7,column=1)
-c6 = tkinter.Checkbutton(window ,variable=a_var, onvalue="DDN", offvalue="EXCH",text='Select NIC to block DDN')
-c6.grid(row=7,column=2)
-c6.deselect()
+c5 = tkinter.Checkbutton(window ,variable=c_var, onvalue="BN",text='NIC-B')
+c5.grid(row=7,column=2)
+c5.deselect()
+c6 = tkinter.Checkbutton(window ,variable=c_var, onvalue="BS",text='All NIC')
+c6.grid(row=7,column=3)
+c6.select()
+c7 = tkinter.Checkbutton(window, text='Select NIC to BLock EXCH',variable=a_var, onvalue="EXCH", offvalue="DDN")
+c7.grid(row=8,column=1)
+c8 = tkinter.Checkbutton(window ,variable=a_var, onvalue="DDN", offvalue="EXCH",text='Select NIC to block DDN')
+c8.grid(row=8,column=2)
+c8.deselect()
 
 executeButton=tkinter.Button(window,text="Execute",command=status)
-executeButton.grid(row=8,column=1)
+executeButton.grid(row=9,column=1)
 my_progress = ttk.Progressbar(window, orient="horizontal", length="300", mode="determinate")
-my_progress.grid(row=9,column=1)
+my_progress.grid(row=10,column=1)
 
 
 window.mainloop()

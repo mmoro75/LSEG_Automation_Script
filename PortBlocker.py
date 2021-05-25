@@ -140,12 +140,13 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
         print("Connected to remote host")
         a = input("Please provide NIC Card to block: DDN or EXCH?: ").upper()
         b = input("Please provide protocol you want to block UDP, TCP, BOTH: U,T,B: ").upper()
+        c = input("Please specify which NIC card you want to block: A, B or All ").upper()
         try:
           wait=eval(input("how many seconds to you want to keep Cards blocked? enter value in seconds: "))
         except ValueError:
             print("please provide time in seconds")
         seconds = str(wait)
-        if a == "DDN" and b=="B":
+        if a == "DDN" and b=="B" and c=="All":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth1 + " -j " + eth2 + " -r B -s B -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All DDN NIC cards traffic is blocked for {wait} seconds")
@@ -153,7 +154,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             print("Completed all the blocked channles are back on line ")
             ssh.close()
             print("Portblocker stopped all the traffic is now restored")
-        elif a == "DDN" and b== "U":
+        elif a == "DDN" and b== "U" and c=="All":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth1 + " -j " + eth2 + " -r U -s U -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All UPD Traffic is blocked on DDN NIC for {wait} seconds")
@@ -161,7 +162,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             print("Completed all the blocked channles are back on line ")
             ssh.close()
             print("Portblocker stopped all the traffic is now restored")
-        elif a == "DDN" and b == "T":
+        elif a == "DDN" and b == "T" and c=="All":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth1 + " -j " + eth2 + " -r T -s T -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All TCP Traffic is blocked on DDN NIC for {wait} seconds")
@@ -169,7 +170,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             print("Completed all the blocked channles are back on line ")
             ssh.close()
             print("Portblocker stopped all the traffic is now restored")
-        elif a == "EXCH" and b == "B":
+        elif a == "EXCH" and b == "B" and c=="All":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth3 + " -j " + eth4 + " -r B -s B -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All Exchange NIC cards traffic is blocked for {wait} seconds")
@@ -177,7 +178,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             print("Completed all the blocked channles are back on line ")
             ssh.close()
             print("Portblocker stopped all the traffic is now restored")
-        elif a == "EXCH" and b== "U":
+        elif a == "EXCH" and b== "U" and c=="All":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth3 + " -j " + eth4 + " -r U -s U -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All UPD Traffic is blocked on Exchange NIC for {wait} seconds")
@@ -185,7 +186,7 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             print("Completed all the blocked channles are back on line ")
             ssh.close()
             print("Portblocker stopped all the traffic is now restored")
-        elif a == "EXCH" and b == "T":
+        elif a == "EXCH" and b == "T" and c=="All":
             stdin, stdout, stderr = ssh.exec_command(
                 "./portblocker -i " + eth3 + " -j " + eth4 + " -r T -s T -d B -e B -t " + seconds + " -f 1 -a")
             print(f"All TCP Traffic is blocked on Exchange NIC for {wait} seconds")
@@ -193,6 +194,99 @@ def block_Ports(hostname,eth,eth2,eth3,eth4):
             print("Completed all the blocked channles are back on line ")
             ssh.close()
             print("Portblocker stopped all the traffic is now restored")
+
+###### Only A NIC will be block #############
+
+        elif a == "DDN" and b == "B" and c == "A":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth1 + " -r B -d B -t " + seconds + " -f 1 -a")
+            print(f"A DDN NIC card traffic is blocked for {wait} seconds")
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            ssh.close()
+        elif a == "DDN" and b == "U" and c == "A":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth1 + " -r U -d B -t " + seconds + " -f 1 -a")
+            print(f"All UPD Traffic is blocked on DDN-A NIC for {wait} seconds")
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            ssh.close()
+        elif a == "DDN" and b == "T" and c == "A":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth1 + " -r T -d B -t " + seconds + " -f 1 -a")
+            print(f"All TCP Traffic is blocked on DDN-A NIC for {wait} seconds")
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            ssh.close()
+        elif a == "EXCH" and b == "B" and c == "A":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth3 + " -r B -d B -t " + seconds + " -f 1 -a")
+            print(f"All Exchange NIC-A cards traffic are blocked for {wait} seconds")
+            window.update()
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            ssh.close()
+        elif a == "EXCH" and b == "U" and c == "A":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth3 + " -r U -d B -t " + seconds + " -f 1 -a")
+            print(f"All UPD Traffic is blocked on Exchange NIC-A for {wait} seconds")
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            ssh.close()
+        elif a == "EXCH" and b == "T" and c == "A":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth3 + "-r T -d B -t " + seconds + " -f 1 -a")
+            print(f"All TCP Traffic is blocked on Exchange NIC-A for {wait} seconds")
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            ssh.close()
+
+######## only B NIC will be blocked #######################
+
+        elif a == "DDN" and b == "B" and c == "B":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth2 + " -r B -d B -t " + seconds + " -f 1 -a")
+            print(f"All traffic on DDN-B NIC card is blocked for {wait} seconds")
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            ssh.close()
+        elif a == "DDN" and b == "U" and c == "B":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth2 + " -r U -d B -t " + seconds + " -f 1 -a")
+            print(f"All UPD Traffic is blocked on DDN NIC-B for {wait} seconds")
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            ssh.close()
+        elif a == "DDN" and b == "T" and c == "B":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth2 + " -r T -d B -t " + seconds + " -f 1 -a")
+            print(f"All TCP Traffic is blocked on DDN NIC-B for {wait} seconds")
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            ssh.close()
+        elif a == "EXCH" and b == "B" and c == "B":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth4 + " -r B -d B -t " + seconds + " -f 1 -a")
+            print(f"All traffic on Exchange NIC-B cards is blocked for {wait} seconds")
+            window.update()
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            ssh.close()
+        elif a == "EXCH" and b == "U" and c == "B":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth4 + " -r U -d B -t " + seconds + " -f 1 -a")
+            print(f"All UPD Traffic is blocked on Exchange NIC-B for {wait} seconds")
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            ssh.close()
+        elif a == "EXCH" and b == "T" and c == "B":
+            stdin, stdout, stderr = ssh.exec_command(
+                "./portblocker -i " + eth4 + " -r T -d B -t " + seconds + " -f 1 -a")
+            print(f"All TCP Traffic is blocked on Exchange NIC-B for {wait} seconds")
+            time.sleep(wait + 10)
+            print("Completed all the blocked channles are back on line ")
+            ssh.close()
+
         else:
             print(f"WRONG SELECTIONS\n Your current selection is:\n NIC Cards to Block={a}\n Protocol:{b},please check all the inforamtion are correct")
             block_Ports(hostname,username,password,eth1,eth2,eth3,eth4)
