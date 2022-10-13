@@ -162,7 +162,7 @@ def Find_Critical_Files(path,fileList):
             files_lines = fo.readlines()  # readlines create a list with each line of the file
             for each_line in files_lines:
                 if re.findall(patt, each_line):
-                    if each_line is not "":
+                    if each_line != "":
                         fo1.write(each_line)  # write line on errorlog file
         fo.close()
         fo1.close()
@@ -186,7 +186,7 @@ def Find_Warning_Files(path,fileList):
             files_lines = fo.readlines()  # readlines create a list with each line of the file
             for each_line in files_lines:  # loop into list crreated
                 if re.findall(patt, each_line):  # only print when you fine key word DDNA or DDNB
-                    if each_line is not "":
+                    if each_line != "":
                         fo1.write(each_line)  # write line on errorlog file
         fo.close()
         fo1.close()
